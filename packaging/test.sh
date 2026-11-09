@@ -13,7 +13,8 @@ fail() { echo "::error::$1"; exit 1; }
 BIN=$(command -v vigil) || fail "vigil not on PATH after install"
 test -f /etc/vigil.conf || fail "/etc/vigil.conf missing"
 test -f /usr/lib/systemd/system/vigil@.service || fail "unit file missing"
-grep -q "^ExecStart=$BIN\$" /usr/lib/systemd/system/vigil@.service || fail "unit ExecStart does not match $BIN"
+EXEC=$(sed -n 's/^ExecStart=//p' /usr/lib/systemd/system/vigil@.service)
+[ "$(readlink -f "$EXEC")" = "$(readlink -f "$BIN")" ] || fail "unit ExecStart ($EXEC) does not point at $BIN"
 "$BIN" -1 > /tmp/vigil.out 2>/tmp/vigil.err || fail "vigil -1 failed: $(cat /tmp/vigil.err)"
 cat /tmp/vigil.out
 grep -q ' load ' /tmp/vigil.out || fail "no load line in output"
