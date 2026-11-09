@@ -35,9 +35,9 @@ jobs:
             image: opensuse/leap:15.6
             deps: zypper --non-interactive install gcc make rpm-build tar gzip
     steps:
-      - uses: actions/checkout@v4
       - name: Install build tools
         run: ${{ matrix.deps }}
+      - uses: actions/checkout@v4
       - name: Build linux-${{ matrix.distro }}.${{ matrix.ext }}
         run: sh packaging/build.sh ${{ matrix.distro }}
       - name: Install and smoke-test the package
