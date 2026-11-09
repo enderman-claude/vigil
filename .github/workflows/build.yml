@@ -1,0 +1,49 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    name: linux-${{ matrix.distro }}.${{ matrix.ext }}
+    runs-on: ubuntu-latest
+    container: ${{ matrix.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - distro: ubuntu
+            ext: deb
+            image: ubuntu:24.04
+            deps: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential
+          - distro: arch
+            ext: pkg.tar.zst
+            image: archlinux:latest
+            deps: pacman -Syu --noconfirm base-devel
+          - distro: redhat
+            ext: rpm
+            image: registry.access.redhat.com/ubi9/ubi
+            deps: dnf install -y gcc make rpm-build tar gzip
+          - distro: opensuse
+            ext: rpm
+            image: opensuse/leap:15.6
+            deps: zypper --non-interactive install gcc make rpm-build tar gzip
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build tools
+        run: ${{ matrix.deps }}
+      - name: Build linux-${{ matrix.distro }}.${{ matrix.ext }}
+        run: sh packaging/build.sh ${{ matrix.distro }}
+      - name: Install and smoke-test the package
+        run: sh packaging/test.sh ${{ matrix.distro }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-${{ matrix.distro }}
+          path: dist/linux-${{ matrix.distro }}.${{ matrix.ext }}
+          if-no-files-found: error

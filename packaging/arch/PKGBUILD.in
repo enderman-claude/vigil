@@ -1,0 +1,23 @@
+pkgname=vigil
+pkgver=@VERSION@
+pkgrel=1
+pkgdesc='Read-only real-time system status display that replaces getty on a TTY'
+arch=('x86_64' 'aarch64')
+url='https://github.com/enderman-claude/vigil'
+license=('custom')
+depends=('glibc')
+makedepends=('gcc' 'make')
+backup=('etc/vigil.conf')
+options=('!debug')
+source=("vigil-$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+	cd "vigil-$pkgver"
+	make PREFIX=/usr
+}
+
+package() {
+	cd "vigil-$pkgver"
+	make install DESTDIR="$pkgdir" PREFIX=/usr SYSCONFDIR=/etc UNITDIR=/usr/lib/systemd/system
+}

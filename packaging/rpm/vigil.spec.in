@@ -1,0 +1,33 @@
+%global debug_package %{nil}
+
+Name:       vigil
+Version:    @VERSION@
+Release:    1
+Summary:    Read-only real-time system status display that replaces getty
+License:    Unspecified
+URL:        https://github.com/enderman-claude/vigil
+Source0:    vigil-%{version}.tar.gz
+BuildRequires: gcc
+BuildRequires: make
+
+%description
+Shows load, CPU, memory, disks, network and battery on a Linux TTY.
+Takes no input and drops privileges after start-up. Runs in place of getty.
+
+%prep
+%setup -q
+
+%build
+make PREFIX=/usr
+
+%install
+make install DESTDIR=%{buildroot} PREFIX=/usr SYSCONFDIR=/etc UNITDIR=/usr/lib/systemd/system
+
+%files
+/usr/bin/vigil
+/usr/lib/systemd/system/vigil@.service
+%config(noreplace) /etc/vigil.conf
+
+%changelog
+* Mon Nov 09 2026 enderman-claude <enderman-claude@users.noreply.github.com> - @VERSION@-1
+- Packaged by CI

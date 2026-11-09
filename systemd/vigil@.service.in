@@ -5,7 +5,7 @@ Conflicts=getty@%i.service
 Before=getty@%i.service
 
 [Service]
-ExecStart=/usr/local/bin/vigil -B
+ExecStart=@BINDIR@/vigil
 Restart=always
 RestartSec=1
 Type=simple
@@ -25,7 +25,7 @@ SendSIGHUP=yes
 NoNewPrivileges=yes
 CapabilityBoundingSet=CAP_SETUID CAP_SETGID
 ProtectSystem=strict
-ProtectHome=yes
+ProtectHome=read-only
 PrivateTmp=yes
 ProtectKernelModules=yes
 ProtectKernelTunables=yes
