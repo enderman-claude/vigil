@@ -4,7 +4,7 @@ Name:       vigil
 Version:    @VERSION@
 Release:    1
 Summary:    Read-only real-time system status display that replaces getty
-License:    Unspecified
+License:    GPL-3.0-only
 URL:        https://github.com/enderman-claude/vigil
 Source0:    vigil-%{version}.tar.gz
 BuildRequires: gcc
@@ -24,6 +24,7 @@ make PREFIX=/usr
 make install DESTDIR=%{buildroot} PREFIX=/usr SYSCONFDIR=/etc UNITDIR=/usr/lib/systemd/system
 
 %files
+%license LICENSE
 /usr/bin/vigil
 /usr/lib/systemd/system/vigil@.service
 %config(noreplace) /etc/vigil.conf

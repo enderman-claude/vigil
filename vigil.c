@@ -1,4 +1,6 @@
 /*
+ * SPDX-License-Identifier: GPL-3.0-only (see LICENSE)
+ *
  * vigil - read-only, real-time system status display for a Linux TTY.
  * Meant to run in place of getty (e.g. vigil@tty1.service). No login, no input.
  *

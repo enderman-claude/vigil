@@ -71,4 +71,4 @@ vigil [-c file] [-i seconds] [-u uid] [-B] [-1]
 
 ## License
 
-None chosen yet.
+GPL-3.0-only. See [LICENSE](LICENSE).

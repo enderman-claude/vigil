@@ -21,6 +21,7 @@ ubuntu)
 	make clean
 	R=$(mktemp -d); chmod 755 "$R"
 	make install DESTDIR="$R" PREFIX=/usr SYSCONFDIR=/etc UNITDIR=$UNITDIR
+	install -Dm644 LICENSE "$R/usr/share/doc/vigil/copyright"
 	mkdir -m 755 "$R/DEBIAN"
 	cat > "$R/DEBIAN/control" <<EOF
 Package: vigil
